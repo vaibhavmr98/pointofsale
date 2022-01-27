@@ -1,0 +1,52 @@
+.sidebar-widget-item{
+    height : 80px !important;
+    padding: 15px;
+
+}
+
+.sidebar-widget-item a i{
+    font-size: 25px;
+}
+
+.sidebar-widget-item a p{
+    padding: 5px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.salesman{
+
+    width: auto;
+    margin-left: 5px;
+    max-width: 200px;
+
+}
+
+
+.form-check-input:checked {
+    background-color: #000;
+    border-color: #000;
+}
+
+.table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+btn.rounded{
+    border-radius: 50% !important;
+}
+
+.product-div-scroll{
+    overflow-y: scroll;
+    max-height: calc(100vh - 130px);
+}
+
+.cut-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

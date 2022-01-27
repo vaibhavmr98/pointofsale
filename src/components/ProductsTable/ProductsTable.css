@@ -1,0 +1,42 @@
+.btn.rounded{
+    border-radius: 50% !important;
+    height: 25px!important;
+    width: 25px!important;
+    padding: 0px;
+}
+
+.qty,.mrp,.discount-div,.additional-discount-div{
+    max-width: 10rem;
+    min-width: 10rem;
+}
+
+.fixTableHead {
+    overflow-y: auto;
+    height: calc( 100vh - 275px );
+  }
+  .fixTableHead thead th {
+    position: sticky;
+    top: 0;
+    z-index: 999999;
+  }
+  table {
+    border-collapse: collapse;        
+    width: 100%;
+  }
+
+  table thead th {
+      background: #000 !important;
+  }
+
+  .border-blue{
+    border: 2px solid #00a4e5 !important;
+  }
+
+  .text-primary{
+    color:#00a4e5 !important
+  }
+  
+  .total-amount{
+    font-weight: 600 !important;
+    font-size: 20px !important;
+  }
