@@ -1,4 +1,4 @@
-import React,{ useState } from 'react'
+import React,{ useState,useEffect } from 'react'
 import './Main.css';
 import logo from '../headerLogo-bgnone.png';
 import Product from './Product/Product';
@@ -11,6 +11,22 @@ import swal from 'sweetalert';
 const Main = () => {
     
     const [filteredProducts, setfilteredProducts] = useState(PRODUCTJSON);
+    const [loading, setloading] = useState(true);
+
+
+    const Loading =()=>
+        <div className="loading">
+            <div></div>
+            <div></div>
+        </div>  
+
+    
+    useEffect(() => {
+        setTimeout(() => {
+            setloading(false)
+        }, 2000);
+    });
+    
 
     const [cartItems, setCartItems] = useState([]);
 
@@ -84,6 +100,7 @@ const Main = () => {
     const totalQuantity = cartItems.reduce((quantity,item) => quantity + item.quantity , 0);
 
     return (
+        loading ? (<Loading/>) :
         <div className="container-fluid pt-2 pb-2">
             <div className="row">
                 <div className="col-8">
