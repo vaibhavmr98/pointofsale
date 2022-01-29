@@ -1,29 +1,87 @@
 import React,{ useState } from 'react'
 import './Main.css';
 import logo from '../headerLogo-bgnone.png';
-import ProductsTable from './ProductsTable/ProductsTable';
 import Product from './Product/Product';
 import {PRODUCTJSON} from '../constants/productsJson';
 import {CATEGORYJSON} from '../constants/categoryJson';
+import ProductItems from './ProductsTable/ProductItems/ProductItems';
+import swal from 'sweetalert';
 
 
 const Main = () => {
     
     const [filteredProducts, setfilteredProducts] = useState(PRODUCTJSON);
 
+    const [cartItems, setCartItems] = useState([]);
+
+    const handleAddProductToCart = (product) => {
+
+
+        const ProductExists = cartItems.find((item) => item.productVarientId === product.productVarientId);
+        if(ProductExists){
+            setCartItems( cartItems.map( (item) => item.productVarientId === product.productVarientId ?
+             {...ProductExists, quantity : ProductExists.quantity + 1} : item ))
+        }else{
+            setCartItems([...cartItems,{...product,quantity : 1}])
+        }
+
+    }
+
+    const handleRemoveProductToCart = (product) => {
+
+        const ProductExists = cartItems.find((item) => item.productVarientId === product.productVarientId);
+        if(ProductExists.quantity === 1){
+            setCartItems(cartItems.filter((item) => item.productVarientId !== product.productVarientId));
+        }else{
+            setCartItems( cartItems.map( (item) => item.productVarientId === product.productVarientId ?
+              {...ProductExists, quantity : ProductExists.quantity - 1} : item ))
+        }
+    }
+
+    const handleRemoveWholeProduct = (product) => {
+
+        const ProductExists = cartItems.find((item) => item.productVarientId === product.productVarientId);
+        if(ProductExists){
+            setCartItems(cartItems.filter((item) => item.productVarientId !== product.productVarientId));
+        }
+    }
+
+    const handleDiscartSale = () => {
+
+        const willDelete =  swal({
+            title: "Are you sure?",
+            text: "Are you sure that you want to Discard this sale?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          }).then((value) => {
+            if (willDelete) {
+                setCartItems([]);
+              }
+          });;
+           
+          
+        
+    }
+
+    
+
     const onDropdownSelected = (e) => {
-     
-       if (e.target.value == 'all' ) {
+       if (e.target.value == '0' ) {
         setfilteredProducts(PRODUCTJSON)  ; 
        } else {
-        setfilteredProducts(PRODUCTJSON.filter(product => product.categoryId ==  e.target.value));
+        let FILTEREDPRODUCTSBYCATEGORY = PRODUCTJSON.filter(product => product.categoryId ==  e.target.value);
+        //console.log(FILTEREDPRODUCTSBYCATEGORY);
+        setfilteredProducts(FILTEREDPRODUCTSBYCATEGORY);
        }
        
 
        //here you will see the current selected value of the select input
     }
 
-    //console.log(PRODUCTJSON);
+    const totalPrice = cartItems.reduce((mrp,item) => mrp + item.quantity * item.mrp , 0);
+
+    const totalQuantity = cartItems.reduce((quantity,item) => quantity + item.quantity , 0);
 
     return (
         <div className="container-fluid pt-2 pb-2">
@@ -46,7 +104,7 @@ const Main = () => {
                                     </div>
                                 </div>
                                 <div>
-                                    <select className="form-select salesman" title="Salesman" tabIndex="-1" aria-hidden="true" id="salesManId" >
+                                    <select className="form-select salesman" title="Salesman"  defaultValue="0" tabIndex="-1" aria-hidden="true" id="salesManId" >
                                         <option value="0"> MunnemG</option>
                                         <option value="1"> MunnemG 1</option>
                                         <option value="2"> MunnemG 2</option>
@@ -75,8 +133,8 @@ const Main = () => {
                                 <span className="input-group-text" id="addon-wrapping">
                                     <i className="fa fa-user"></i>
                                 </span>
-                                <select className="form-select select2" aria-label="Default select example" disabled="disabled">
-                                    <option selected>Walk In Customer</option>
+                                <select className="form-select select2" aria-label="Default select example" defaultValue="0" disabled="disabled">
+                                    <option value="0">Walk In Customer</option>
                                    
                                 </select>
                             </div>
@@ -85,13 +143,92 @@ const Main = () => {
                         
                     </div>
 
-                    <ProductsTable/>
+                    <div className="row">
+                        <div className="col-12">
+                            <div className="card mt-2">
+                                <div className="card-body p-0 table-responsive fixTableHead">
+                                    <table className="table table-striped align-middle mb-0">
+                                        <thead className="table-dark"> 
+                                            <tr>
+                                                <th className="wsrno text-center" scope="col">Sr. No.</th>
+                                                <th className="witemcode text-center " scope="col">Itemcode</th>
+                                                <th className="wproductname text-left " scope="col">Product</th>
+                                                <th className="wqty text-center" scope="col">Qty</th>
+                                                <th className="wnetamt text-right" scope="col">Price</th>
+                                                <th className="wnetamt text-right" scope="col">Net Amount</th>
+                                                <th className="wdel" scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            <ProductItems cartItems={cartItems} 
+                                                handleAddProductToCart={handleAddProductToCart}
+                                                handleRemoveProductToCart={handleRemoveProductToCart}
+                                                handleRemoveWholeProduct={handleRemoveWholeProduct}/>
+                                        
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-12">
+                            <div className="card mt-2"  style={{"border": "none"}}>
+                                <div className="card-body p-0" >
+                                <input className="form-control form-control-sm mb-2 border-blue" type="text" placeholder="Remarks" aria-label="Remarks"/>
+                                <div className="row mt-2">
+                                    <div className="col border-right">
+                                        <h6 id="total_quantity">{totalQuantity.toFixed(2)}</h6>
+                                        <small className='fw-bolder'>QUANTITY</small>
+                                    </div>
+                                    <div className="col border-right">
+                                        <h6 id="total_quantity">
+                                            {totalPrice.toFixed(2)}
+                                        </h6>
+                                        <small className='fw-bolder'>MRP</small>
+                                    </div>
+                                
+                                    <div className="col border-right">
+                                        <h6 id="total_quantity">0.00</h6>
+                                        <small className='fw-bolder'>ROUND OFF</small>
+                                    </div>
+                                    <div className="col border-right">
+                                        <h6 id="total_quantity" className='total-amount '>
+                                        <i className="fas fa-rupee-sign" aria-hidden="true"></i> {totalPrice.toFixed(2)}</h6>
+                                        <small className='fw-bolder'>AMOUNT</small>
+                                    </div>
+                                    
+                                </div>
+
+                            
+                                <div className="row mt-2">
+                                
+                                    <div className="col-md-3 ">
+                                        <button type="button" className="btn btn-dark w-100"><i className="fa fa-pause" aria-hidden="true"></i> HOLD</button>
+                                    </div>
+                                    <div className="col-md-3 ">
+                                        <button type="button" className="btn btn-dark w-100"><i className="fa fa-credit-card" aria-hidden="true"></i> Card</button>
+                                    </div>
+                                    <div className="col-md-3 ">
+                                        <button type="button" className="btn btn-dark w-100"><i className="fa fa-forward"  aria-hidden="true"></i> UPI</button>
+                                    </div>
+                                    <div className="col-md-3 ">
+                                        <button type="button" className="btn btn-dark w-100"><i className="fas fa-rupee-sign" aria-hidden="true"></i> Cash</button>
+                                    </div>
+                                    
+
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div className="col-4">
                     <div className="row mb-3">
                         <div className="col-12">
                             <div className="d-flex justify-content-end">
-                                <button className="btn btn-sm btn-dark ms-1" type="button" ><i className="fa fa-trash" aria-hidden="true"></i></button>
+                                <button className="btn btn-sm btn-dark ms-1" type="button" onClick={handleDiscartSale}>
+                                        <i className="fa fa-trash" aria-hidden="true"></i></button>
                                 <button className="btn btn-sm btn-dark ms-1" type="button"><i className="fa fa-arrows-alt" aria-hidden="true"></i></button>
                                 <button className="btn btn-sm btn-dark ms-1" type="button"><i className="fa fa-times" aria-hidden="true"></i></button>
                             </div>
@@ -105,8 +242,8 @@ const Main = () => {
                                 <span className="input-group-text" id="addon-wrapping">
                                     <i className="fa fa-cubes"></i>
                                 </span>
-                                <select className="form-select" aria-label="Default select example" onChange={onDropdownSelected} >
-                                    <option selected value='all'>All Categories</option>
+                                <select className="form-select" aria-label="Default select example" defaultValue={0} onChange={onDropdownSelected} >
+                                    <option  value='0'>All Categories</option>
                                     {CATEGORYJSON.map(o => <option key={o.categoryId} value={o.categoryId}>{o.categoryName}</option>)}
                                 
                                 </select>
@@ -118,71 +255,14 @@ const Main = () => {
                         <div className="col-12" >
                             <div className="card" >
                                 <div className="row text-center" >
-                                    
-                                {filteredProducts.map((props) => (
-                                    <Product productVariantId={props.productVarientId} {...props} />
-                                ))}
-                                    
+                                    <Product productItems={filteredProducts} 
+                                                handleAddProductToCart={handleAddProductToCart}  />
                                 </div>
                             </div>
                         </div>
                     </div>
 
                   
-                    {/* <div className="row mb-2">
-                        <div className="col-12">
-                            <div className="card customer-highlights">
-                                <div className="card-body text-start">
-                                    <p className="d-block mb-0">
-                                        <p className="fw-bold mb-0"> Last Visited :</p>
-                                        <p className="mb-0">-</p>
-                                    </p>
-                                    <p className="d-block mb-0">
-                                        <p className="fw-bold mb-0"> Last Bill Amount :</p> 
-                                        <p className="mb-0">-</p>
-                                    </p>
-                                   
-                                    <div className="d-grid gap-2">
-                                        <button type="button" className="btn btn-dark" onclick="printlastBill()">
-	                                      	<i className="fa fa-print" aria-hidden="true"></i> Last Bill Print</button>
-                                       
-                                    </div>
-                                  
-                                    
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div>
-                  
-                    <div className="row mb-2">
-                        <div className="col-12">
-                            <div className="card customer-highlights" style={{"height" : "100%"}}>
-                                <div className="card-title">
-                                    <h6 className="mt-2">Other Details</h6>
-                                </div>
-                                <div className="card-body text-start">
-                                   
-                                    <p className="d-block mb-0">
-                                        <p className="fw-bold mb-0"> Most Purchased Item :</p> 
-                                        <p className="mb-0">-</p>
-                                    </p>
-                                    <p className="d-block mb-0">
-                                        <p className="fw-bold mb-0"> Closing :</p> 
-                                        <p className="mb-0">-</p>
-                                    </p>
-                                    <p className="d-block mb-0">
-                                        <p className="fw-bold mb-0">Total Purchase :</p> 
-                                        <p className="mb-0">-</p>
-                                    </p>
-                                    
-                                </div>
-
-
-                            </div>
-                        </div>
-                    </div> */}
                     
                 </div>
             </div>

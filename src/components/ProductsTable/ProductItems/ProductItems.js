@@ -1,31 +1,61 @@
 import React from 'react'
 import "../ProductsTable.css";
 
-const ProductItems = () => {
+const ProductItems = ({cartItems,handleAddProductToCart,handleRemoveProductToCart,handleRemoveWholeProduct}) => {
+
     return (
+
         <>
+
+        {cartItems.length === 0 && (
             <tr>
-                <th scope="row">1</th>
-                <td>VASY0001</td>
-                <td>KELLOGGS CHOCOS FILLS 250 G</td>
+                <th scope="row" colSpan="7">No Products Added Yet</th>
+            </tr>
+        )}
+
+        {cartItems.map((items,index) => (
+
+            <tr key={items.productVarientId}>
+                <th scope="row">{index + 1}</th>
+                <td>{items.itemCode}</td>
+                <td>{items.productName}</td>
                 <td className="qty">
-                    <div class="input-group input-group-sm ">
-                        <button class="btn btn-dark" type="button" id="button-addon1"><i class="fa fa-minus" aria-hidden="true"></i></button>
-                        <input type="text" class="form-control text-center" placeholder="" readOnly aria-label="Example text with button addon" aria-describedby="button-addon1" value="1" minLength="1" />
-                        <button class="btn btn-dark" type="button" id="button-addon1"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                    <div className="input-group input-group-sm ">
+                        <button className="btn btn-dark" type="button" 
+                            id="button-addon1"
+                            onClick={() => handleRemoveProductToCart(items)}><i className="fa fa-minus" aria-hidden="true"></i></button>
+
+                        <input type="text" className="form-control text-center" 
+                            placeholder="" readOnly aria-label="Example text with button addon" 
+                            aria-describedby="button-addon1" value={items.quantity} minLength="1" />
+                        
+                        
+                        <button className="btn btn-dark" type="button" id="button-addon1"
+                            onClick={() => handleAddProductToCart(items)}><i className="fa fa-plus" aria-hidden="true"></i></button>
                     </div>
                 </td>
                 <td>
-                    125.00
+                    {items.mrp}
                 </td>
                 <td>
-                    125.00
+                    {(items.mrp) * (items.quantity)}
                 </td>
                 <td>
-                    <button class="btn btn-sm btn-outline-danger" type="button" id="button-addon1"><i class="fa fa-times"></i></button>
+                    <button className="btn btn-sm btn-outline-danger" 
+                        type="button" id="button-addon1"
+                        onClick={()=>handleRemoveWholeProduct(items)}><i className="fa fa-times"></i></button>
                 </td>
             </tr>
+        )
+            //<ProductItems key={cartItems.productVariantId} dataIndex={index} cartItems={items}/>
+        )}      
+        
+
+       
         </>
+
+
+       
     )
 }
 
