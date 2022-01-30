@@ -115,8 +115,18 @@ body{
   }
   
   
-
-
+th.witemcode.text-center {
+    width: 10% !important;
+}
+th.wsrno.text-center {
+  width: 5% !important;
+}
+th.wproductname.text-left {
+  width: 40% !important;
+}
+th.wqty.text-center {
+  width: 10% !important;
+}
 
 
 

@@ -6,19 +6,33 @@ import {PRODUCTJSON} from '../constants/productsJson';
 import {CATEGORYJSON} from '../constants/categoryJson';
 import ProductItems from './ProductsTable/ProductItems/ProductItems';
 import swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Main = () => {
     
     const [filteredProducts, setfilteredProducts] = useState(PRODUCTJSON);
     const [loading, setloading] = useState(true);
+    const toastOptions =  {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme:'colored'
+    }
+    const notifyInfo = (text) => toast.info(text,toastOptions);
 
 
-    const Loading =()=>
-        <div className="loading">
+    function Loading() {
+        return <div className="loading">
             <div></div>
             <div></div>
-        </div>  
+        </div>;
+    }  
 
     
     useEffect(() => {
@@ -47,7 +61,9 @@ const Main = () => {
 
         const ProductExists = cartItems.find((item) => item.productVarientId === product.productVarientId);
         if(ProductExists.quantity === 1){
-            setCartItems(cartItems.filter((item) => item.productVarientId !== product.productVarientId));
+            //setCartItems(cartItems.filter((item) => item.productVarientId !== product.productVarientId));
+            toast.error("Quantity can't be Zero...!!!",toastOptions)
+            
         }else{
             setCartItems( cartItems.map( (item) => item.productVarientId === product.productVarientId ?
               {...ProductExists, quantity : ProductExists.quantity - 1} : item ))
@@ -74,10 +90,22 @@ const Main = () => {
             if (willDelete) {
                 setCartItems([]);
               }
-          });;
-           
-          
+          });
         
+    }
+
+    const handleHoldBill = () =>{
+        notifyInfo("This Service is not Available...!!!")
+    }
+
+    const handleCashPayment =() =>{
+
+        if (cartItems.length > 0) {
+            setCartItems([]);
+            toast.success("Sales Added Successfully...!!!",toastOptions)   
+        }else{
+            toast.error("Add minimum one Product...!!!",toastOptions)
+        }
     }
 
     
@@ -102,6 +130,7 @@ const Main = () => {
     return (
         loading ? (<Loading/>) :
         <div className="container-fluid pt-2 pb-2">
+            <ToastContainer/>
             <div className="row">
                 <div className="col-8">
                     <div className="row mb-2">
@@ -167,11 +196,11 @@ const Main = () => {
                                     <table className="table table-striped align-middle mb-0">
                                         <thead className="table-dark"> 
                                             <tr>
-                                                <th className="wsrno text-center" scope="col">Sr. No.</th>
+                                                <th className="wsrno text-center" scope="col" >#</th>
                                                 <th className="witemcode text-center " scope="col">Itemcode</th>
                                                 <th className="wproductname text-left " scope="col">Product</th>
                                                 <th className="wqty text-center" scope="col">Qty</th>
-                                                <th className="wnetamt text-right" scope="col">Price</th>
+                                                <th className="wprice text-right" scope="col">Price</th>
                                                 <th className="wnetamt text-right" scope="col">Net Amount</th>
                                                 <th className="wdel" scope="col"></th>
                                             </tr>
@@ -221,16 +250,20 @@ const Main = () => {
                                 <div className="row mt-2">
                                 
                                     <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"><i className="fa fa-pause" aria-hidden="true"></i> HOLD</button>
+                                        <button type="button" className="btn btn-dark w-100"
+                                            onClick={handleHoldBill}><i className="fa fa-pause" aria-hidden="true"></i> HOLD</button>
                                     </div>
                                     <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"><i className="fa fa-credit-card" aria-hidden="true"></i> Card</button>
+                                        <button type="button" className="btn btn-dark w-100"
+                                             onClick={handleHoldBill}><i className="fa fa-credit-card" aria-hidden="true"></i> Card</button>
                                     </div>
                                     <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"><i className="fa fa-forward"  aria-hidden="true"></i> UPI</button>
+                                        <button type="button" className="btn btn-dark w-100"
+                                         onClick={handleHoldBill}><i className="fa fa-forward"  aria-hidden="true"></i> UPI</button>
                                     </div>
                                     <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"><i className="fas fa-rupee-sign" aria-hidden="true"></i> Cash</button>
+                                        <button type="button" className="btn btn-dark w-100"
+                                             onClick={handleCashPayment}><i className="fas fa-rupee-sign" aria-hidden="true"></i> Cash</button>
                                     </div>
                                     
 
