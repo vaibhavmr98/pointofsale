@@ -49,6 +49,10 @@ btn.rounded{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 14px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+    font-weight: 500;
 }
 
 
@@ -128,7 +132,15 @@ th.wqty.text-center {
   width: 10% !important;
 }
 
+p.small-text{
+  font-weight: 900;
+  font-size: 9px;
+  text-align: center;
+}
 
+.mrp{
+  font-weight: 700;
+}
 
 
 

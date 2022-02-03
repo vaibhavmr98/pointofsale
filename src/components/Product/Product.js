@@ -15,17 +15,31 @@ const Product = ({productItems,handleAddProductToCart}) => {
   return (
     <>
         {productItems.map((product) => (
+            
             <div key={product.productVarientId} className='col-4'>
-                <div className="card mb-2 p-1">
-                    <img className="card-img-top" alt='Product'  
-                        style={{height: '121px', width: '121px', display: 'block', margin: 'auto',padding : '15px'}} 
-                        src={product.imagepath ? product.imagepath :defaultImage} data-holder-rendered="true"/>
+                <div className="card mb-2">
+                    <div className="row">
+                        <div className="col-4" style={{borderRight : "1px solid #efefef"}}>
+                            <img className="card-img-top" alt='Product'  
+                                style={{height: '60px', width: '60px', display: 'block', margin: 'auto',padding : '3px',border : "1px solid #efefef"}} 
+                                src={product.imagepath ? product.imagepath :defaultImage} data-holder-rendered="true"/>
+                        </div>
+                        <div className="col-8 text-center">
+                            <div className="mrpDiv mt-3">
+                                <p className='mb-0 small-text'>PRICE</p>
+                                <span className='mrp'><i className="fas fa-rupee-sign" style={{fontSize : '10px',marginRight: '2px'}} aria-hidden="true"></i>
+                                    {product.mrp}/<span style={{fontSize : '10px',marginRight: '2px'}}>{product.measurementCode}</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                   
                     <div className="card-body p-1">
-                        <h6 className=" cut-text">{product.productName}</h6>
+                        <h6 className="cut-text">{product.productName}</h6>
                     </div>
                     <div className="card-footer p-0">
                         <button className="btn btn-sm w-100 btn-dark" onClick={() => handleAddProductToCart(product)}>Add To Cart</button>
-                    </div>
+                    </div> 
                 </div>
             </div>
         ))}

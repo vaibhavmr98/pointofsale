@@ -127,6 +127,11 @@ const Main = () => {
 
     const totalQuantity = cartItems.reduce((quantity,item) => quantity + item.quantity , 0);
 
+
+    // TYPEHEADE START
+
+    // TYPEHEAD END
+
     return (
         loading ? (<Loading/>) :
         <div className="container-fluid pt-2 pb-2">
