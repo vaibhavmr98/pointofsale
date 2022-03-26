@@ -8,12 +8,16 @@ import ProductItems from './ProductsTable/ProductItems/ProductItems';
 import swal from 'sweetalert';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Typeahead } from 'react-bootstrap-typeahead'; 
+
+import 'react-bootstrap-typeahead/css/Typeahead.css';
 
 
 const Main = () => {
     
     const [filteredProducts, setfilteredProducts] = useState(PRODUCTJSON);
     const [loading, setloading] = useState(true);
+    const [selected, setSelected] = useState([]);
     const toastOptions =  {
         position: "top-right",
         autoClose: 3000,
@@ -175,16 +179,29 @@ const Main = () => {
                                 <span className="input-group-text" id="addon-wrapping">
                                     <i className="fas fa-scanner"></i>
                                 </span>
-                                <input type="text" className="form-control" placeholder="Scan Barcode/Enter Product Name" />
+                                {/* <input type="text" className="form-control" placeholder="Scan Barcode/Enter Product Name" /> */}
+                                <Typeahead
+                                   id="basic-example"
+                                   labelKey="productName"
+                                   filterBy={['itemCode', 'productName']}
+                                   loading="false"
+                                   selectHintOnEnter="true"
+                                   onChange={(selected) => {
+                                    handleAddProductToCart(selected[0])
+                                  }}
+                                   options={PRODUCTJSON}
+                                   placeholder="Scan Barcode/Enter Product Name"
+                                   selected={selected}
+                                />
                             </div>
                         </div>
                         <div className="col-6">
 
-                        <div className="input-group flex-nowrap">
+                            <div className="input-group flex-nowrap">
                                 <span className="input-group-text" id="addon-wrapping">
                                     <i className="fa fa-user"></i>
                                 </span>
-                                <select className="form-select select2" aria-label="Default select example" defaultValue="0" disabled="disabled">
+                                <select className="form-select select2" name='customer' aria-label="Default select example" defaultValue="0" disabled="disabled">
                                     <option value="0">Walk In Customer</option>
                                    
                                 </select>
@@ -193,90 +210,125 @@ const Main = () => {
                         </div>
                         
                     </div>
+                    <form id='posform'>
+                        <div className="row">
+                            <div className="col-1" style={{paddingRight: "0px"}}>
+                                <div className="sidebar-widget">
+                                    <div className="sidebar-widget-item">
+                                        <i className='fa fa-pause'></i>
+                                        <p>HOLD BILLS</p>
+                                    </div>
+                                    <div className="sidebar-widget-item">
+                                        <i className='fa fa-list'></i>
+                                        <p>PAYMENT</p>
+                                    </div>
+                                    <div className="sidebar-widget-item">
+                                        <i className='fa fa-gift'></i>
+                                        <p>REDEEM LOYALTY</p>
+                                    </div>
+                                    <div className="sidebar-widget-item">
+                                    <i className="fa fa-plus-square" aria-hidden="true"></i>
+                                        <p>ADD PAYMENT</p>
+                                    </div>
+                                    <div className="sidebar-widget-item">
+                                        <i className='fa fa-sticky-note'></i>
+                                        <p>CREDIT NOTES</p>
+                                    </div>
+                                    <div className="sidebar-widget-item">
+                                        <i className='fa fa-shopping-cart'></i>
+                                        <p>ORDERS</p>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div className="col-11">
+                                <div className="card mt-2">
+                                    <div className="card-body p-0 table-responsive fixTableHead">
+                                        <table className="table table-striped align-middle mb-0">
+                                            <thead className="table-dark"> 
+                                                <tr>
+                                                    <th className="wsrno text-center" scope="col" >#</th>
+                                                    <th className="witemcode text-center " scope="col">Itemcode</th>
+                                                    <th className="wproductname text-left " scope="col">Product</th>
+                                                    <th className="wqty text-center" scope="col">Qty</th>
+                                                    <th className="wprice text-right" scope="col">Price</th>
+                                                    <th className="wnetamt text-right" scope="col">Net Amount</th>
+                                                    <th className="wdel" scope="col"></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
 
-                    <div className="row">
-                        <div className="col-12">
-                            <div className="card mt-2">
-                                <div className="card-body p-0 table-responsive fixTableHead">
-                                    <table className="table table-striped align-middle mb-0">
-                                        <thead className="table-dark"> 
-                                            <tr>
-                                                <th className="wsrno text-center" scope="col" >#</th>
-                                                <th className="witemcode text-center " scope="col">Itemcode</th>
-                                                <th className="wproductname text-left " scope="col">Product</th>
-                                                <th className="wqty text-center" scope="col">Qty</th>
-                                                <th className="wprice text-right" scope="col">Price</th>
-                                                <th className="wnetamt text-right" scope="col">Net Amount</th>
-                                                <th className="wdel" scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            <ProductItems cartItems={cartItems} 
-                                                handleAddProductToCart={handleAddProductToCart}
-                                                handleRemoveProductToCart={handleRemoveProductToCart}
-                                                handleRemoveWholeProduct={handleRemoveWholeProduct}/>
-                                        
+                                                <ProductItems cartItems={cartItems} 
+                                                    handleAddProductToCart={handleAddProductToCart}
+                                                    handleRemoveProductToCart={handleRemoveProductToCart}
+                                                    handleRemoveWholeProduct={handleRemoveWholeProduct}/>
                                             
-                                        </tbody>
-                                    </table>
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-12">
+                                <div className="card mt-2"  style={{"border": "none"}}>
+                                    <div className="card-body p-0" >
+                                    <input className="form-control form-control-sm mb-2 border-blue" type="text" placeholder="Remarks" aria-label="Remarks"/>
+                                    <div className="row mt-2">
+                                        <div className="col border-right">
+                                            <h6 id="total_quantity">{totalQuantity.toFixed(2)}
+                                            <input type="hidden" name="totalQuantity" id="totalQuantity" value= {totalQuantity.toFixed(2)} />
+                                            </h6>
+                                            <small className='fw-bolder'>QUANTITY</small>
+                                        </div>
+                                        <div className="col border-right">
+                                            <h6 id="total_price">
+                                                {totalPrice.toFixed(2)}
+                                                <input type="hidden" name="totalMrp" id="totalMrp" value= {totalPrice.toFixed(2)} />
+                                            </h6>
+                                            <small className='fw-bolder'>MRP</small>
+                                        </div>
+                                    
+                                        <div className="col border-right">
+                                            <h6 id="total_quantity">0.00</h6>
+                                            <small className='fw-bolder'>ROUND OFF</small>
+                                            <input type="hidden" name="roundoff" id="roundoff" value="0" />
+                                        </div>
+                                        <div className="col border-right">
+                                            <h6 id="total_quantity" className='total-amount'>
+                                            <i className="fas fa-rupee-sign" aria-hidden="true"></i> {totalPrice.toFixed(2)}</h6>
+                                            <input type="hidden" name="total" id="total" value= {totalPrice.toFixed(2)} />
+                                            <small className='fw-bolder'>AMOUNT</small>
+                                        </div>
+                                        
+                                    </div>
+
+                                
+                                    <div className="row mt-2">
+                                    
+                                        <div className="col-md-3 ">
+                                            <button type="button" className="btn btn-dark w-100"
+                                                onClick={handleHoldBill}><i className="fa fa-pause" aria-hidden="true"></i> HOLD</button>
+                                        </div>
+                                        <div className="col-md-3 ">
+                                            <button type="button" className="btn btn-dark w-100"
+                                                onClick={handleHoldBill}><i className="fa fa-credit-card" aria-hidden="true"></i> Card</button>
+                                        </div>
+                                        <div className="col-md-3 ">
+                                            <button type="button" className="btn btn-dark w-100"
+                                            onClick={handleHoldBill}><i className="fa fa-forward"  aria-hidden="true"></i> UPI</button>
+                                        </div>
+                                        <div className="col-md-3 ">
+                                            <button type="button" className="btn btn-dark w-100"
+                                                onClick={handleCashPayment}><i className="fas fa-rupee-sign" aria-hidden="true"></i> Cash</button>
+                                        </div>
+                                        
+
+                                    </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="col-12">
-                            <div className="card mt-2"  style={{"border": "none"}}>
-                                <div className="card-body p-0" >
-                                <input className="form-control form-control-sm mb-2 border-blue" type="text" placeholder="Remarks" aria-label="Remarks"/>
-                                <div className="row mt-2">
-                                    <div className="col border-right">
-                                        <h6 id="total_quantity">{totalQuantity.toFixed(2)}</h6>
-                                        <small className='fw-bolder'>QUANTITY</small>
-                                    </div>
-                                    <div className="col border-right">
-                                        <h6 id="total_quantity">
-                                            {totalPrice.toFixed(2)}
-                                        </h6>
-                                        <small className='fw-bolder'>MRP</small>
-                                    </div>
-                                
-                                    <div className="col border-right">
-                                        <h6 id="total_quantity">0.00</h6>
-                                        <small className='fw-bolder'>ROUND OFF</small>
-                                    </div>
-                                    <div className="col border-right">
-                                        <h6 id="total_quantity" className='total-amount '>
-                                        <i className="fas fa-rupee-sign" aria-hidden="true"></i> {totalPrice.toFixed(2)}</h6>
-                                        <small className='fw-bolder'>AMOUNT</small>
-                                    </div>
-                                    
-                                </div>
-
-                            
-                                <div className="row mt-2">
-                                
-                                    <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"
-                                            onClick={handleHoldBill}><i className="fa fa-pause" aria-hidden="true"></i> HOLD</button>
-                                    </div>
-                                    <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"
-                                             onClick={handleHoldBill}><i className="fa fa-credit-card" aria-hidden="true"></i> Card</button>
-                                    </div>
-                                    <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"
-                                         onClick={handleHoldBill}><i className="fa fa-forward"  aria-hidden="true"></i> UPI</button>
-                                    </div>
-                                    <div className="col-md-3 ">
-                                        <button type="button" className="btn btn-dark w-100"
-                                             onClick={handleCashPayment}><i className="fas fa-rupee-sign" aria-hidden="true"></i> Cash</button>
-                                    </div>
-                                    
-
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
                 <div className="col-4">
                     <div className="row mb-3">

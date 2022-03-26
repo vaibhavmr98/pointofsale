@@ -26,7 +26,7 @@ const ProductItems = ({cartItems,handleAddProductToCart,handleRemoveProductToCar
                             onClick={() => handleRemoveProductToCart(items)}><i className="fa fa-minus" aria-hidden="true"></i></button>
 
                         <input type="text" className="form-control text-center" 
-                            placeholder="" readOnly aria-label="Example text with button addon" 
+                            placeholder="" name={`salesItem[${index}].quantity`} readOnly aria-label="Example text with button addon" 
                             aria-describedby="button-addon1" value={items.quantity} minLength="1" />
                         
                         
@@ -44,6 +44,16 @@ const ProductItems = ({cartItems,handleAddProductToCart,handleRemoveProductToCar
                     <button className="btn btn-sm btn-outline-danger" 
                         type="button" id="button-addon1"
                         onClick={()=>handleRemoveWholeProduct(items)}><i className="fa fa-times"></i></button>
+
+                    <input type="hidden" name={`salesItem[${index}].mrp`} id={`mrp${index}`} value={items.mrp} />
+                    <input type="hidden" name={`salesItem[${index}].productVarientId`} id={`productVarientId${index}`} value={items.productVarientId} />
+                    <input type="hidden" name={`salesItem[${index}].itemCode`} id={`itemCode${index}`} value={items.itemCode} />
+                    <input type="hidden" name={`salesItem[${index}].sellingPrice`} id={`sellingPrice${index}`} value={items.sellingPrice} />
+                    <input type="hidden" name={`salesItem[${index}].productId`} id={`productId${index}`} value={items.productId} />
+                    <input type="hidden" name={`salesItem[${index}].productName`} id={`productName${index}`} value={items.productName} />
+                    <input type="hidden" name={`salesItem[${index}].imagepath`} id={`imagepath${index}`} value={items.imagepath} />
+                    <input type="hidden" name={`salesItem[${index}].netAmount`} id={`netAmount${index}`} value= {(items.mrp) * (items.quantity)} />
+
                 </td>
             </tr>
         )

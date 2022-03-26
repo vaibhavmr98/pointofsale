@@ -1,17 +1,28 @@
+.sidebar-widget{
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  margin-top: 8px;
+  cursor: pointer;
+}
+
 .sidebar-widget-item{
-    height : 80px !important;
-    padding: 15px;
-
+    height : 65px !important;
+    border-bottom: 1px solid #ced4da;
+    margin-top: inherit;
+    padding: 2px;
 }
 
-.sidebar-widget-item a i{
-    font-size: 25px;
+.sidebar-widget-item  i{
+    font-size: 27px;
 }
 
-.sidebar-widget-item a p{
-    padding: 5px;
-    font-size: 11px;
-    font-weight: 600;
+.sidebar-widget-item  p{
+  padding-top: 3px;
+  font-size: 9px;
+  font-weight: 700;
+  margin-bottom: 0px;
+  line-height: 1.2;
 }
 
 .salesman{
@@ -60,7 +71,7 @@ body{
     font-family: 'Hind Guntur', sans-serif;
     height: 100vh;
     width: 100vw;
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: center;
     overflow: hidden;
@@ -69,7 +80,7 @@ body{
   .content{
     height: 100vh;
     width: 100vw;
-    display: flex;
+    display: block;
     align-items: center;
     justify-content: center;
     background: #fff;
@@ -87,9 +98,10 @@ body{
 
   .loading {
     display: inline-block;
-    position: relative;
+    position: absolute;
     width: 64px;
     height: 64px;
+    top: 45%;
   }
   .loading div {
     position: absolute;
@@ -142,8 +154,15 @@ p.small-text{
   font-weight: 700;
 }
 
+div#basic-example {
+  z-index: 99999999;
+    font-size: 15px;
+}
 
 
+div#basic-example a.dropdown-item:hover{
+  background: #bbbbb2;
+}
 
 
 

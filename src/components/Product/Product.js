@@ -16,7 +16,7 @@ const Product = ({productItems,handleAddProductToCart}) => {
     <>
         {productItems.map((product) => (
             
-            <div key={product.productVarientId} className='col-4'>
+            <div key={product.productVarientId} className='col-xl-4 col-lg-6 col-md-12 col-sm-12'>
                 <div className="card mb-2">
                     <div className="row">
                         <div className="col-4" style={{borderRight : "1px solid #efefef"}}>
